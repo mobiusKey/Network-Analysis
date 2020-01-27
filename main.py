@@ -1,38 +1,36 @@
-import dpkt 
-from dpkt.compat import compat_ord
 import os, sys
-import socket
-import binascii
-import datetime
-import json
+import csv
+# import json
 
 
-file = open('20110413_pcap_1.pcap', 'rb')
-#ip:mac
-output_string = "edges: ["
+ips = ""
+#output_string = "edges: ["
 
-binetflow = {}
-ip_macs = {}
-packets = dpkt.pcap.Reader(file)
+# def mac_addr(address):
+    # return ':'.join('%02x' % compat_ord(b) for b in address)
 
-
-def mac_addr(address):
-    return ':'.join('%02x' % compat_ord(b) for b in address)
-
-for ts, buf in packets:
-
-    eth = dpkt.ethernet.Ethernet(buf)
-    if isinstance(eth.data, dpkt.ip.IP):
-        ip = eth.data
-        src = socket.inet_ntoa(ip.src)
-        dst = socket.inet_ntoa(ip.dst)
-        mac = mac_addr(eth.src)
+# for ts, buf in packets:
+    # print(datetime.datetime.utcfromtimestamp(ts))
+    # eth = dpkt.ethernet.Ethernet(buf)
+    # if isinstance(eth.data, dpkt.ip.IP):
+        # ip = eth.data
+        # src = socket.inet_ntoa(ip.src)
+        # dst = socket.inet_ntoa(ip.dst)
         
-        output_string += '{  source: {id: ' + src + ', label: "' + src + '"}, target: {id: ' + dst + ', label: "'+dst+'"},value: "" },'
-        print(datetime.datetime.utcfromtimestamp(ts))
+        # if src not in ips:
+            # ips.append(src)
+        # # mac = mac_addr(eth.src)
+with open('conversations.csv') as csvfile:
+    readCSV = csv.reader(csvfile, delimiter=',')
+    for row in readCSV:
+        if row[0] != "Address A":
+           # output_string += '{  source: {id: ' +'"'+ row[0] +'"'+ ', label: "' + row[0] + '"}, target: {id: ' +'"'+ row[1]+'"' + ', label: "'+ row[1]+ '"},value: ' +row[3]+' },'
+            if row[0] not in ips:
+                ips += row[0] + "\n"
+       
 
-output_string += "]}"
-print(json.dumps(ip_macs))
-output = open("vis", "w")
-output.write(output_string)
+#output_string += "]}}"
+# print(json.dumps(ip_macs))
+output = open("ips", "w")
+output.write(ips)
 output.close()
