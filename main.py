@@ -15,6 +15,7 @@ binetflow = {}
 ip_macs = {}
 packets = dpkt.pcap.Reader(file)
 
+
 def mac_addr(address):
     return ':'.join('%02x' % compat_ord(b) for b in address)
 
@@ -27,7 +28,7 @@ for ts, buf in packets:
         dst = socket.inet_ntoa(ip.dst)
         mac = mac_addr(eth.src)
         
-        output_string += '{  source: {id: ' + src + ', label: "' + src + '"}, target: {id: ' + dst + ', label: "'+dst+'"},value: "Test" },'
+        output_string += '{  source: {id: ' + src + ', label: "' + src + '"}, target: {id: ' + dst + ', label: "'+dst+'"},value: "" },'
         print(datetime.datetime.utcfromtimestamp(ts))
 
 output_string += "]}"
