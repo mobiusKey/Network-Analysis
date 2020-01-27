@@ -3,7 +3,7 @@ import csv
 # import json
 
 
-ips = ""
+ports = {}
 #output_string = "edges: ["
 
 # def mac_addr(address):
@@ -23,14 +23,18 @@ ips = ""
 with open('conversations.csv') as csvfile:
     readCSV = csv.reader(csvfile, delimiter=',')
     for row in readCSV:
-        if row[0] != "Address A":
+        if row[1] is not None:
            # output_string += '{  source: {id: ' +'"'+ row[0] +'"'+ ', label: "' + row[0] + '"}, target: {id: ' +'"'+ row[1]+'"' + ', label: "'+ row[1]+ '"},value: ' +row[3]+' },'
-            if row[0] not in ips:
-                ips += row[0] + "\n"
+            if row[1] not in ports:
+                ports[row[1]] = [row2]
+            else:
+                if row[2] not in ports[row[1]]:
+                    ports[row[1]].append(row[2])
+                    
        
 
 #output_string += "]}}"
 # print(json.dumps(ip_macs))
-output = open("ips", "w")
-output.write(ips)
+output = open("ports", "w")
+output.write(ports)
 output.close()
