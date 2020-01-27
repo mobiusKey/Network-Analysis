@@ -3,6 +3,7 @@ from dpkt.compat import compat_ord
 import os, sys
 import socket
 import binascii
+import datetime
 import json
 
 
@@ -27,7 +28,7 @@ for ts, buf in packets:
         mac = mac_addr(eth.src)
         
         output_string += '{  source: {id: ' + src + ', label: "' + src + '"}, target: {id: ' + dst + ', label: "'+dst+'"},value: "Test" },'
-        
+        print(datetime.datetime.utcfromtimestamp(ts))
 
 output_string += "]}"
 print(json.dumps(ip_macs))
